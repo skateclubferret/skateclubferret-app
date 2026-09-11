@@ -13,6 +13,7 @@ import {
   Inter_600SemiBold,
 } from "@expo-google-fonts/inter";
 import { AuthProvider } from "@/lib/auth-context";
+import { FamilyProvider } from "@/lib/family-context";
 import { colors } from "@/constants/theme";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -34,13 +35,15 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <StatusBar style="dark" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.sand },
-        }}
-      />
+      <FamilyProvider>
+        <StatusBar style="dark" />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.sand },
+          }}
+        />
+      </FamilyProvider>
     </AuthProvider>
   );
 }

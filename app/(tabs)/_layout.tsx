@@ -32,6 +32,20 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="creneaux"
+        options={{
+          title: "Créneaux",
+          tabBarIcon: ({ color }) => <TabIcon glyph="📅" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="enfants"
+        options={{
+          title: "Enfants",
+          tabBarIcon: ({ color }) => <TabIcon glyph="👧" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="compte"
         options={{
           title: "Mon compte",

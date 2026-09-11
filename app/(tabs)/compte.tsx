@@ -1,45 +1,14 @@
-import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useAuth } from "@/lib/auth-context";
+import { useFamily } from "@/lib/family-context";
 import { supabase } from "@/lib/supabase";
 import { colors, fonts, radii, spacing } from "@/constants/theme";
 
-type Adherent = {
-  id: string;
-  prenom: string | null;
-  nom: string | null;
-  email: string;
-  adhesion_active: boolean;
-};
-
-// Lit la fiche adhérent de la personne connectée — même requête et même
-// politique RLS ("adherents can view own row") que mon-espace.html sur le site.
+// Fiche adhérent + cartes de cours non rattachées à un enfant — même lecture
+// RLS ("adherents/cartes_cours can view own row(s)") que mon-espace.html.
 export default function CompteScreen() {
-  const { session } = useAuth();
-  const [adherent, setAdherent] = useState<Adherent | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!session?.user.email) return;
-    let cancelled = false;
-
-    supabase
-      .from("adherents")
-      .select("id, prenom, nom, email, adhesion_active")
-      .eq("email", session.user.email)
-      .maybeSingle()
-      .then(({ data, error: fetchError }) => {
-        if (cancelled) return;
-        if (fetchError) setError(fetchError.message);
-        setAdherent(data);
-        setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [session?.user.email]);
+  const { adherent, cartes, loading, error } = useFamily();
+  const mesCartes = cartes.filter((c) => !c.enfant_id);
+  const adresseLigne = [adherent?.code_postal, adherent?.ville].filter(Boolean).join(" ");
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
@@ -51,9 +20,7 @@ export default function CompteScreen() {
       {error && <Text style={styles.error}>Erreur : {error}</Text>}
 
       {!loading && !error && !adherent && (
-        <Text style={styles.subtitle}>
-          Aucune fiche adhérent associée à cet email pour l'instant.
-        </Text>
+        <Text style={styles.subtitle}>Aucune fiche adhérent associée à cet email pour l'instant.</Text>
       )}
 
       {adherent && (
@@ -62,9 +29,45 @@ export default function CompteScreen() {
             {adherent.prenom} {adherent.nom}
           </Text>
           <Text style={styles.cardBody}>{adherent.email}</Text>
-          <Text style={[styles.badge, adherent.adhesion_active ? styles.badgeActive : styles.badgeInactive]}>
-            {adherent.adhesion_active ? "Adhésion active" : "Adhésion en attente"}
-          </Text>
+          {adherent.telephone && <Text style={styles.cardBody}>{adherent.telephone}</Text>}
+          {(adherent.adresse || adresseLigne) && (
+            <Text style={styles.cardBody}>
+              {[adherent.adresse, adresseLigne].filter(Boolean).join(", ")}
+            </Text>
+          )}
+          <View style={styles.badgeRow}>
+            <Text style={[styles.badge, adherent.adhesion_active ? styles.badgeActive : styles.badgeInactive]}>
+              {adherent.adhesion_active ? "Adhésion active" : "Adhésion en attente"}
+            </Text>
+            {adherent.licence_ffrs_valide && <Text style={[styles.badge, styles.badgeActive]}>Licence FFRS</Text>}
+          </View>
+        </View>
+      )}
+
+      {adherent && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Mes cartes de cours</Text>
+          {mesCartes.length === 0 && <Text style={styles.subtitle}>Aucune carte de cours pour l'instant.</Text>}
+          {mesCartes.map((c) => {
+            const hasSeances = (c.seances_totales || 0) > 0;
+            const restantes = (c.seances_totales || 0) - (c.seances_utilisees || 0);
+            const date = c.date_achat ? new Date(c.date_achat).toLocaleDateString("fr-FR") : "";
+            return (
+              <View key={c.id} style={styles.carteItem}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.carteType}>{c.type_carte}</Text>
+                  <Text style={styles.carteDate}>Achetée le {date}</Text>
+                </View>
+                {hasSeances ? (
+                  <Text style={styles.carteReste}>
+                    {restantes} séance{restantes > 1 ? "s" : ""}
+                  </Text>
+                ) : (
+                  <Text style={[styles.badge, styles.badgeActive]}>✓ Réglé</Text>
+                )}
+              </View>
+            );
+          })}
         </View>
       )}
 
@@ -118,6 +121,12 @@ const styles = StyleSheet.create({
     color: colors.ink,
     opacity: 0.7,
   },
+  badgeRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing(2),
+    marginTop: spacing(1),
+  },
   badge: {
     alignSelf: "flex-start",
     fontFamily: fonts.bodySemiBold,
@@ -125,7 +134,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing(3),
     paddingVertical: spacing(1.5),
     borderRadius: radii.pill,
-    marginTop: spacing(1),
     overflow: "hidden",
   },
   badgeActive: {
@@ -135,6 +143,40 @@ const styles = StyleSheet.create({
   badgeInactive: {
     backgroundColor: "rgba(224,69,31,.12)",
     color: colors.coralDark,
+  },
+  section: {
+    marginTop: spacing(2),
+    gap: spacing(2),
+  },
+  sectionTitle: {
+    fontFamily: fonts.headingMedium,
+    fontSize: 16,
+    color: colors.navy,
+  },
+  carteItem: {
+    backgroundColor: colors.white,
+    borderRadius: radii.md,
+    padding: spacing(4),
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing(2),
+  },
+  carteType: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 14,
+    color: colors.navy,
+  },
+  carteDate: {
+    fontFamily: fonts.body,
+    fontSize: 12.5,
+    color: colors.ink,
+    opacity: 0.6,
+    marginTop: spacing(0.5),
+  },
+  carteReste: {
+    fontFamily: fonts.headingMedium,
+    fontSize: 16,
+    color: colors.tealDark,
   },
   signOut: {
     marginTop: spacing(6),

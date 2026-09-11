@@ -10,15 +10,16 @@ export default function HomeScreen() {
       <Text style={styles.eyebrow}>SKATE CLUB FERRET</Text>
       <Text style={styles.title}>Bienvenue{session?.user.email ? " !" : ""}</Text>
       <Text style={styles.subtitle}>
-        Squelette Phase 0 — connecté à la même base que skateclubferret.fr.
+        Connecté à la même base que skateclubferret.fr.
       </Text>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Prochaine étape</Text>
+        <Text style={styles.cardTitle}>Espace adhérent (lecture)</Text>
         <Text style={styles.cardBody}>
-          Cet écran est un point de départ. Les prochains ajouts (Phase 1 du
-          plan) : profil, enfants, cartes de cours et créneaux, lus depuis
-          Supabase comme sur mon-espace.html.
+          Ton profil, tes enfants, tes cartes de cours et les créneaux à venir
+          (cours à l'année + stages) sont consultables dans les onglets
+          ci-dessous. La réservation et le paiement arrivent en phase
+          suivante.
         </Text>
       </View>
     </ScrollView>

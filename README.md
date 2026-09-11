@@ -8,11 +8,12 @@ Ce dépôt est volontairement séparé de `skateclubferret/skateclubferret-2026`
 
 - ✅ Connexion (`app/(auth)/login.tsx`) avec les identifiants Supabase existants
 - ✅ Client Supabase configuré (`lib/supabase.ts`, clé publique dans `app.json`)
-- ✅ Navigation par onglets (`app/(tabs)/`) : Accueil, Mon compte (lit la fiche adhérent en RLS)
+- ✅ Navigation par onglets (`app/(tabs)/`) : Accueil, Créneaux, Enfants, Mon compte
+- ✅ **Phase 1 — Espace adhérent (lecture)** : profil complet (`compte.tsx`), enfants + santé/droit à l'image/licence/cartes (`enfants.tsx`), cartes de cours personnelles (`compte.tsx`), consultation des créneaux à venir — cours à l'année de la famille et stages vacances ouverts (`creneaux.tsx`). Tout est chargé une fois via `lib/family-context.tsx` (même lecture RLS que mon-espace.html) et lu, pas encore modifiable — réservation/paiement en phase suivante.
 - ✅ Charte graphique reprise du site (`constants/theme.ts`) + polices Space Grotesk / Inter
-- ⬜ Tout le reste du plan (créneaux, réservations, paiements Stripe natifs, notifications push, console admin, boutique, événements/photos, messagerie) — phases 1 à 7
+- ⬜ Réservations, paiements Stripe natifs, notifications push, console admin, boutique, événements/photos, messagerie — phases 2 à 7
 
-**Vérifié** : `npm install`, `npx expo install --fix` (SDK 52.0.0), `tsc --noEmit` propre, et `expo export --platform ios` compile un bundle complet (993 modules) sans erreur. Pas encore testé sur un vrai appareil/simulateur (à faire via `npx expo start` + Dev Build).
+**Vérifié** : `npm install`, `npx expo install --fix` (SDK 52.0.0), `tsc --noEmit` propre, et `expo export --platform ios` compile un bundle complet (997 modules) sans erreur. Pas encore testé sur un vrai appareil/simulateur avec les écrans de la Phase 1 (le squelette Phase 0 l'a été, voir plus bas).
 
 **Icônes/splash** : `assets/images/*.png` sont pour l'instant une copie du logo du club (`logo-icon.png`, 2315×2315) — à remplacer par de vraies déclinaisons (icône 1024×1024 sans transparence, adaptive icon Android avec marge de sécurité, splash) avant une vraie soumission store.
 
@@ -49,7 +50,7 @@ Il faudra un fichier `eas.json` (profils `development` / `preview` / `production
 
 ```
 app/
-  _layout.tsx          racine : polices, StatusBar, AuthProvider
+  _layout.tsx          racine : polices, StatusBar, AuthProvider, FamilyProvider
   index.tsx             redirige vers (tabs) ou (auth)/login selon la session
   (auth)/
     _layout.tsx
@@ -57,10 +58,14 @@ app/
   (tabs)/
     _layout.tsx          barre d'onglets
     index.tsx             Accueil
-    compte.tsx             Mon compte (lit adherents en RLS)
+    creneaux.tsx           Créneaux à venir (cours à l'année + stages)
+    enfants.tsx             Enfants : santé, droit à l'image, licence, cartes, groupe
+    compte.tsx              Mon compte : profil, adhésion, mes cartes de cours
 lib/
   supabase.ts            client supabase-js (URL + clé publique)
   auth-context.tsx        contexte React de la session Supabase
+  family-context.tsx      contexte React : adhérent + enfants + cartes + inscriptions (chargés une fois)
+  creneaux-format.ts      libellés lieux/jours, format des groupes/dates (repris de mon-espace.html)
 constants/
   theme.ts                couleurs, polices, espacements repris du site
 ```
