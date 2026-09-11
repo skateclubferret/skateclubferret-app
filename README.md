@@ -12,11 +12,13 @@ Ce dépôt est volontairement séparé de `skateclubferret/skateclubferret-2026`
 - ✅ Charte graphique reprise du site (`constants/theme.ts`) + polices Space Grotesk / Inter
 - ⬜ Tout le reste du plan (créneaux, réservations, paiements Stripe natifs, notifications push, console admin, boutique, événements/photos, messagerie) — phases 1 à 7
 
+**Vérifié** : `npm install`, `npx expo install --fix` (SDK 52.0.0), `tsc --noEmit` propre, et `expo export --platform ios` compile un bundle complet (993 modules) sans erreur. Pas encore testé sur un vrai appareil/simulateur (à faire via `npx expo start` + Dev Build).
+
 **Icônes/splash** : `assets/images/*.png` sont pour l'instant une copie du logo du club (`logo-icon.png`, 2315×2315) — à remplacer par de vraies déclinaisons (icône 1024×1024 sans transparence, adaptive icon Android avec marge de sécurité, splash) avant une vraie soumission store.
 
-## Prérequis — important
+## Prérequis
 
-**Ce projet n'a pas encore été installé ni lancé** : la machine sur laquelle il a été écrit n'a pas Node.js. Avant de continuer :
+Node.js et les dépendances sont déjà installés dans ce dépôt (voir ci-dessus). Pour repartir d'une machine neuve :
 
 1. **Installer Node.js LTS** — [nodejs.org](https://nodejs.org) (ou `winget install OpenJS.NodeJS.LTS` sous Windows).
 2. Depuis ce dossier :
@@ -24,7 +26,6 @@ Ce dépôt est volontairement séparé de `skateclubferret/skateclubferret-2026`
    npm install
    npx expo install --fix
    ```
-   La seconde commande aligne toutes les versions Expo/React Native sur le SDK réellement disponible au moment de l'installation (les versions dans `package.json` sont un point de départ raisonnable, pas figées).
 3. **Compte Expo** (gratuit) : `npx expo login` — nécessaire pour EAS Build.
 
 ## Lancer en dev
