@@ -2,6 +2,7 @@
   "expo": {
     "name": "Skate Club Ferret",
     "slug": "skateclubferret-app",
+    "owner": "skateclubferret",
     "scheme": "skateclubferret",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -40,7 +41,12 @@
     "extra": {
       "supabaseUrl": "https://ugqhdjpnxroqcfbmngsc.supabase.co",
       "supabaseAnonKey": "sb_publishable_2A1NY7VEqDsNJh_j98xn0A_QZW0QQ5t",
-      "router": {}
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d3938a6c-8180-4fe4-98a1-2d3301381b83"
+      }
     }
   }
 }
