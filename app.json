@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Skate Club Ferret",
+    "slug": "skateclubferret-app",
+    "scheme": "skateclubferret",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#faf4e8"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "fr.skateclubferret.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#faf4e8"
+      },
+      "package": "fr.skateclubferret.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "supabaseUrl": "https://ugqhdjpnxroqcfbmngsc.supabase.co",
+      "supabaseAnonKey": "sb_publishable_2A1NY7VEqDsNJh_j98xn0A_QZW0QQ5t",
+      "router": {}
+    }
+  }
+}
