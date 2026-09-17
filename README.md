@@ -8,13 +8,12 @@ Ce dépôt est volontairement séparé de `skateclubferret/skateclubferret-2026`
 
 - ✅ Connexion (`app/(auth)/login.tsx`) avec les identifiants Supabase existants
 - ✅ Client Supabase configuré (`lib/supabase.ts`, clé publique dans `app.json`)
-- ✅ Navigation par onglets (`app/(tabs)/`) : Accueil, Créneaux, Enfants, Mon compte
-- ✅ **Phase 1 — Espace adhérent (lecture)** : profil complet (`compte.tsx`), enfants + santé/droit à l'image/licence/cartes (`enfants.tsx`), cartes de cours personnelles (`compte.tsx`), consultation des créneaux à venir — cours à l'année de la famille et stages vacances ouverts (`creneaux.tsx`). Tout est chargé une fois via `lib/family-context.tsx` (même lecture RLS que mon-espace.html) et lu, pas encore modifiable.
-- ✅ **Phase 2 (1/3) — Pré-inscription saison** (`preinscription.tsx`) : bannière sur l'Accueil dès qu'une `preinscription_saisons` est publiée, formulaire (participant, site, créneaux souhaités, portes ouvertes, message) qui écrit dans `preinscriptions` et déclenche l'email de confirmation (`confirm-preinscription`) — mêmes champs et même Edge Function que cours-a-l-annee.html. Statut de la dernière demande affiché sur l'Accueil.
+- ✅ **Espace adhérent** (`app/(tabs)/espace.tsx` + `app/espace/*.tsx`) : mêmes 8 rubriques, mêmes noms, que les tuiles de mon-espace.html sur le site — Ma Carte Membre, Mes avantages partenaires, Carte cours à l'année, Mes réservations stages vacances (réservation/annulation d'un stage, même logique de capacité/débit de séance que le site), Mes enfants et moi, Ajouter à mon compte (renvoie vers le site — paiement natif pas encore fait), Mes informations adhérent, Ma messagerie (pas encore construite — renvoie vers les contacts du club). Tout est chargé une fois via `lib/family-context.tsx` (même lecture RLS que mon-espace.html).
+- ✅ **Pré-inscription saison** (`preinscription.tsx`) : bannière sur l'Accueil dès qu'une `preinscription_saisons` est publiée, formulaire qui écrit dans `preinscriptions` et déclenche l'email de confirmation (`confirm-preinscription`) — mêmes champs et même Edge Function que cours-a-l-annee.html.
 - ✅ Charte graphique reprise du site (`constants/theme.ts`) + polices Space Grotesk / Inter
-- ⬜ Réservation de créneaux, paiements Stripe natifs, notifications push, console admin, boutique, événements/photos, messagerie — reste de la Phase 2 à 7
+- ⬜ Paiement natif Stripe, notifications push, console admin, boutique, événements/photos, messagerie temps réel, modification du profil/enfants — voir le plan pour le détail des phases restantes
 
-**Vérifié** : `npm install`, `npx expo install --fix` (SDK 52.0.0), `tsc --noEmit` propre, et `expo export --platform ios` compile un bundle complet sans erreur. Pas encore testé sur un vrai appareil/simulateur avec les écrans Phase 1/Phase 2 (le squelette Phase 0 l'a été, voir plus bas).
+**Vérifié** : `npm install`, `npx expo install --fix` (SDK 52.0.0), `tsc --noEmit` propre, et `expo export --platform ios` compile un bundle complet sans erreur. Pas encore testé sur un vrai appareil/simulateur avec les derniers écrans (le squelette Phase 0 l'a été, voir plus bas).
 
 **Icônes/splash** : `assets/images/*.png` sont pour l'instant une copie du logo du club (`logo-icon.png`, 2315×2315) — à remplacer par de vraies déclinaisons (icône 1024×1024 sans transparence, adaptive icon Android avec marge de sécurité, splash) avant une vraie soumission store.
 
@@ -58,11 +57,20 @@ app/
     _layout.tsx
     login.tsx
   (tabs)/
-    _layout.tsx          barre d'onglets
+    _layout.tsx          barre d'onglets : Accueil, Espace adhérent
     index.tsx             Accueil (bannière pré-inscription + statut)
-    creneaux.tsx           Créneaux à venir (cours à l'année + stages)
-    enfants.tsx             Enfants : santé, droit à l'image, licence, cartes, groupe
-    compte.tsx              Mon compte : profil, adhésion, mes cartes de cours
+    espace.tsx             Grille des 8 rubriques (mêmes noms que les tuiles du site)
+  espace/                 écrans empilés ouverts depuis (tabs)/espace.tsx
+    carte.tsx               Ma Carte Membre
+    avantages.tsx            Mes avantages partenaires
+    cartes.tsx                Carte cours à l'année (toutes les cartes de la famille)
+    reservations.tsx           Mes réservations stages vacances (réservation/annulation) + mes prochains cours
+    enfants.tsx                Mes enfants et moi : santé, droit à l'image, licence, groupe
+    achat.tsx                   Ajouter à mon compte (renvoie vers le site pour le paiement)
+    compte.tsx                   Mes informations adhérent : profil, adhésion
+    messagerie.tsx                Ma messagerie (bientôt disponible — renvoie vers les contacts du club)
+components/
+  EspaceHeader.tsx        en-tête (retour + titre) commune aux écrans /espace/*
 lib/
   supabase.ts            client supabase-js (URL + clé publique)
   auth-context.tsx        contexte React de la session Supabase

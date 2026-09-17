@@ -2,21 +2,21 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View
 import { useFamily } from "@/lib/family-context";
 import { supabase } from "@/lib/supabase";
 import { colors, fonts, radii, spacing } from "@/constants/theme";
+import { EspaceHeader } from "@/components/EspaceHeader";
 
-// Fiche adhérent + cartes de cours non rattachées à un enfant — même lecture
-// RLS ("adherents/cartes_cours can view own row(s)") que mon-espace.html.
+// Même contenu que la tuile « Mes informations adhérent » (ex « Mon compte »)
+// de mon-espace.html : fiche adhérent en lecture. Les cartes de cours ont
+// leur propre tuile « Carte cours à l'année ». La modification des champs
+// (bulletin d'adhésion, contact d'urgence...) reste à faire.
 export default function CompteScreen() {
-  const { adherent, cartes, loading, error } = useFamily();
-  const mesCartes = cartes.filter((c) => !c.enfant_id);
+  const { adherent, loading, error } = useFamily();
   const adresseLigne = [adherent?.code_postal, adherent?.ville].filter(Boolean).join(" ");
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.eyebrow}>MON COMPTE</Text>
-      <Text style={styles.title}>Espace adhérent</Text>
+      <EspaceHeader eyebrow="ESPACE ADHÉRENT" title="Mes informations adhérent" />
 
       {loading && <ActivityIndicator color={colors.navy} style={{ marginTop: spacing(4) }} />}
-
       {error && <Text style={styles.error}>Erreur : {error}</Text>}
 
       {!loading && !error && !adherent && (
@@ -31,9 +31,7 @@ export default function CompteScreen() {
           <Text style={styles.cardBody}>{adherent.email}</Text>
           {adherent.telephone && <Text style={styles.cardBody}>{adherent.telephone}</Text>}
           {(adherent.adresse || adresseLigne) && (
-            <Text style={styles.cardBody}>
-              {[adherent.adresse, adresseLigne].filter(Boolean).join(", ")}
-            </Text>
+            <Text style={styles.cardBody}>{[adherent.adresse, adresseLigne].filter(Boolean).join(", ")}</Text>
           )}
           <View style={styles.badgeRow}>
             <Text style={[styles.badge, adherent.adhesion_active ? styles.badgeActive : styles.badgeInactive]}>
@@ -41,33 +39,6 @@ export default function CompteScreen() {
             </Text>
             {adherent.licence_ffrs_valide && <Text style={[styles.badge, styles.badgeActive]}>Licence FFRS</Text>}
           </View>
-        </View>
-      )}
-
-      {adherent && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Mes cartes de cours</Text>
-          {mesCartes.length === 0 && <Text style={styles.subtitle}>Aucune carte de cours pour l'instant.</Text>}
-          {mesCartes.map((c) => {
-            const hasSeances = (c.seances_totales || 0) > 0;
-            const restantes = (c.seances_totales || 0) - (c.seances_utilisees || 0);
-            const date = c.date_achat ? new Date(c.date_achat).toLocaleDateString("fr-FR") : "";
-            return (
-              <View key={c.id} style={styles.carteItem}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.carteType}>{c.type_carte}</Text>
-                  <Text style={styles.carteDate}>Achetée le {date}</Text>
-                </View>
-                {hasSeances ? (
-                  <Text style={styles.carteReste}>
-                    {restantes} séance{restantes > 1 ? "s" : ""}
-                  </Text>
-                ) : (
-                  <Text style={[styles.badge, styles.badgeActive]}>✓ Réglé</Text>
-                )}
-              </View>
-            );
-          })}
         </View>
       )}
 
@@ -81,18 +52,6 @@ export default function CompteScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.sand },
   content: { padding: spacing(6), gap: spacing(3) },
-  eyebrow: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 12,
-    letterSpacing: 2,
-    color: colors.coralDark,
-  },
-  title: {
-    fontFamily: fonts.heading,
-    fontSize: 26,
-    color: colors.navy,
-    marginBottom: spacing(3),
-  },
   subtitle: {
     fontFamily: fonts.body,
     fontSize: 14,
@@ -144,42 +103,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(224,69,31,.12)",
     color: colors.coralDark,
   },
-  section: {
-    marginTop: spacing(2),
-    gap: spacing(2),
-  },
-  sectionTitle: {
-    fontFamily: fonts.headingMedium,
-    fontSize: 16,
-    color: colors.navy,
-  },
-  carteItem: {
-    backgroundColor: colors.white,
-    borderRadius: radii.md,
-    padding: spacing(4),
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing(2),
-  },
-  carteType: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    color: colors.navy,
-  },
-  carteDate: {
-    fontFamily: fonts.body,
-    fontSize: 12.5,
-    color: colors.ink,
-    opacity: 0.6,
-    marginTop: spacing(0.5),
-  },
-  carteReste: {
-    fontFamily: fonts.headingMedium,
-    fontSize: 16,
-    color: colors.tealDark,
-  },
   signOut: {
-    marginTop: spacing(6),
+    marginTop: spacing(4),
     alignItems: "center",
     paddingVertical: spacing(3),
   },

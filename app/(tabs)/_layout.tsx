@@ -3,12 +3,15 @@ import { Text } from "react-native";
 import { useAuth } from "@/lib/auth-context";
 import { colors, fonts } from "@/constants/theme";
 
-// Icônes texte simples pour ce squelette (Phase 0) — à remplacer par de vraies
-// icônes (ex. @expo/vector-icons) une fois le projet installable.
+// Icônes texte simples pour ce squelette — à remplacer par de vraies icônes
+// (ex. @expo/vector-icons) une fois le projet installable.
 function TabIcon({ glyph, color }: { glyph: string; color: string }) {
   return <Text style={{ fontSize: 20, color }}>{glyph}</Text>;
 }
 
+// Seuls Accueil et Espace adhérent restent des onglets — les 8 rubriques de
+// l'espace adhérent (mêmes noms que les tuiles de mon-espace.html sur le
+// site) vivent sous /espace/* en écrans empilés, ouverts depuis (tabs)/espace.tsx.
 export default function TabsLayout() {
   const { session, loading } = useAuth();
 
@@ -32,24 +35,10 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="creneaux"
+        name="espace"
         options={{
-          title: "Créneaux",
-          tabBarIcon: ({ color }) => <TabIcon glyph="📅" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="enfants"
-        options={{
-          title: "Enfants",
-          tabBarIcon: ({ color }) => <TabIcon glyph="👧" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="compte"
-        options={{
-          title: "Mon compte",
-          tabBarIcon: ({ color }) => <TabIcon glyph="👤" color={color} />,
+          title: "Espace adhérent",
+          tabBarIcon: ({ color }) => <TabIcon glyph="🪪" color={color} />,
         }}
       />
     </Tabs>

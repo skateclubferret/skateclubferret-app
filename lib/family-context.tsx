@@ -13,6 +13,9 @@ export type Adherent = {
   code_postal: string | null;
   adhesion_active: boolean | null;
   licence_ffrs_valide: boolean | null;
+  numero_carte: string;
+  photo_path: string | null;
+  sante_rempli: boolean | null;
 };
 
 export type Enfant = {
@@ -125,7 +128,7 @@ export function FamilyProvider({ children }: { children: ReactNode }) {
       const { data: adherentRow, error: adherentError } = await supabase
         .from("adherents")
         .select(
-          "id, prenom, nom, email, telephone, adresse, ville, code_postal, adhesion_active, licence_ffrs_valide"
+          "id, prenom, nom, email, telephone, adresse, ville, code_postal, adhesion_active, licence_ffrs_valide, numero_carte, photo_path, sante_rempli"
         )
         .eq("email", email)
         .maybeSingle();

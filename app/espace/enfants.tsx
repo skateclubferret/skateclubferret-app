@@ -2,6 +2,7 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-nat
 import { useFamily } from "@/lib/family-context";
 import { colors, fonts, radii, spacing } from "@/constants/theme";
 import { enfantAge, groupeLabel } from "@/lib/creneaux-format";
+import { EspaceHeader } from "@/components/EspaceHeader";
 
 const GENRE_LABELS: Record<string, string> = { F: "Fille", H: "Garçon" };
 const DROIT_IMAGE_QUALITE_LABELS: Record<string, string> = {
@@ -10,16 +11,16 @@ const DROIT_IMAGE_QUALITE_LABELS: Record<string, string> = {
   tuteur: "le tuteur légal",
 };
 
-// Liste des enfants rattachés à l'adhérent connecté, avec leurs cartes de
-// cours, leur groupe cours à l'année et l'état santé / droit à l'image — en
-// lecture seule (modifications à venir en phase suivante).
+// Même contenu que la tuile « Mes enfants et moi » de mon-espace.html —
+// santé / droit à l'image / licence / groupe cours à l'année pour chaque
+// enfant. Les cartes de cours (hors licence) ont leur propre tuile « Carte
+// cours à l'année » — on ne les reliste pas ici.
 export default function EnfantsScreen() {
   const { adherent, enfants, cartes, inscriptionsAnnee, modelesAnnee, loading, error } = useFamily();
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.eyebrow}>MA FAMILLE</Text>
-      <Text style={styles.title}>Mes enfants</Text>
+      <EspaceHeader eyebrow="ESPACE ADHÉRENT" title="Mes enfants et moi" />
 
       {loading && <ActivityIndicator color={colors.navy} style={{ marginTop: spacing(4) }} />}
       {error && <Text style={styles.error}>Erreur : {error}</Text>}
@@ -32,9 +33,6 @@ export default function EnfantsScreen() {
         const age = enfantAge(enfant.date_naissance);
         const licence = cartes.find(
           (c) => c.enfant_id === enfant.id && (c.type_carte || "").toLowerCase().startsWith("licence")
-        );
-        const autresCartes = cartes.filter(
-          (c) => c.enfant_id === enfant.id && c.id !== licence?.id
         );
         const groupes = inscriptionsAnnee.filter((i) => i.enfant_id === enfant.id);
         const genreLabel = enfant.genre ? GENRE_LABELS[enfant.genre] : null;
@@ -80,22 +78,6 @@ export default function EnfantsScreen() {
               {licence ? `✓ ${licence.type_carte}` : "Aucune licence rattachée"}
             </Text>
 
-            {autresCartes.length > 0 && (
-              <>
-                <Text style={[styles.blockLabel, { marginTop: spacing(2) }]}>Cartes de cours</Text>
-                {autresCartes.map((c) => {
-                  const hasSeances = (c.seances_totales || 0) > 0;
-                  const restantes = (c.seances_totales || 0) - (c.seances_utilisees || 0);
-                  return (
-                    <Text key={c.id} style={styles.cardBody}>
-                      {c.type_carte}
-                      {hasSeances ? ` — ${restantes} séance${restantes > 1 ? "s" : ""} restante${restantes > 1 ? "s" : ""}` : " — ✓ réglé"}
-                    </Text>
-                  );
-                })}
-              </>
-            )}
-
             <Text style={[styles.blockLabel, { marginTop: spacing(2) }]}>Cours à l'année</Text>
             {groupes.length === 0 && (
               <Text style={styles.smallNote}>
@@ -117,18 +99,6 @@ export default function EnfantsScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.sand },
   content: { padding: spacing(6), gap: spacing(4) },
-  eyebrow: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 12,
-    letterSpacing: 2,
-    color: colors.coralDark,
-  },
-  title: {
-    fontFamily: fonts.heading,
-    fontSize: 26,
-    color: colors.navy,
-    marginBottom: spacing(1),
-  },
   subtitle: {
     fontFamily: fonts.body,
     fontSize: 14,
