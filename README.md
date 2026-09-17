@@ -9,11 +9,12 @@ Ce dépôt est volontairement séparé de `skateclubferret/skateclubferret-2026`
 - ✅ Connexion (`app/(auth)/login.tsx`) avec les identifiants Supabase existants
 - ✅ Client Supabase configuré (`lib/supabase.ts`, clé publique dans `app.json`)
 - ✅ Navigation par onglets (`app/(tabs)/`) : Accueil, Créneaux, Enfants, Mon compte
-- ✅ **Phase 1 — Espace adhérent (lecture)** : profil complet (`compte.tsx`), enfants + santé/droit à l'image/licence/cartes (`enfants.tsx`), cartes de cours personnelles (`compte.tsx`), consultation des créneaux à venir — cours à l'année de la famille et stages vacances ouverts (`creneaux.tsx`). Tout est chargé une fois via `lib/family-context.tsx` (même lecture RLS que mon-espace.html) et lu, pas encore modifiable — réservation/paiement en phase suivante.
+- ✅ **Phase 1 — Espace adhérent (lecture)** : profil complet (`compte.tsx`), enfants + santé/droit à l'image/licence/cartes (`enfants.tsx`), cartes de cours personnelles (`compte.tsx`), consultation des créneaux à venir — cours à l'année de la famille et stages vacances ouverts (`creneaux.tsx`). Tout est chargé une fois via `lib/family-context.tsx` (même lecture RLS que mon-espace.html) et lu, pas encore modifiable.
+- ✅ **Phase 2 (1/3) — Pré-inscription saison** (`preinscription.tsx`) : bannière sur l'Accueil dès qu'une `preinscription_saisons` est publiée, formulaire (participant, site, créneaux souhaités, portes ouvertes, message) qui écrit dans `preinscriptions` et déclenche l'email de confirmation (`confirm-preinscription`) — mêmes champs et même Edge Function que cours-a-l-annee.html. Statut de la dernière demande affiché sur l'Accueil.
 - ✅ Charte graphique reprise du site (`constants/theme.ts`) + polices Space Grotesk / Inter
-- ⬜ Réservations, paiements Stripe natifs, notifications push, console admin, boutique, événements/photos, messagerie — phases 2 à 7
+- ⬜ Réservation de créneaux, paiements Stripe natifs, notifications push, console admin, boutique, événements/photos, messagerie — reste de la Phase 2 à 7
 
-**Vérifié** : `npm install`, `npx expo install --fix` (SDK 52.0.0), `tsc --noEmit` propre, et `expo export --platform ios` compile un bundle complet (997 modules) sans erreur. Pas encore testé sur un vrai appareil/simulateur avec les écrans de la Phase 1 (le squelette Phase 0 l'a été, voir plus bas).
+**Vérifié** : `npm install`, `npx expo install --fix` (SDK 52.0.0), `tsc --noEmit` propre, et `expo export --platform ios` compile un bundle complet sans erreur. Pas encore testé sur un vrai appareil/simulateur avec les écrans Phase 1/Phase 2 (le squelette Phase 0 l'a été, voir plus bas).
 
 **Icônes/splash** : `assets/images/*.png` sont pour l'instant une copie du logo du club (`logo-icon.png`, 2315×2315) — à remplacer par de vraies déclinaisons (icône 1024×1024 sans transparence, adaptive icon Android avec marge de sécurité, splash) avant une vraie soumission store.
 
@@ -52,12 +53,13 @@ Il faudra un fichier `eas.json` (profils `development` / `preview` / `production
 app/
   _layout.tsx          racine : polices, StatusBar, AuthProvider, FamilyProvider
   index.tsx             redirige vers (tabs) ou (auth)/login selon la session
+  preinscription.tsx     Formulaire de pré-inscription saison (écran empilé, hors onglets)
   (auth)/
     _layout.tsx
     login.tsx
   (tabs)/
     _layout.tsx          barre d'onglets
-    index.tsx             Accueil
+    index.tsx             Accueil (bannière pré-inscription + statut)
     creneaux.tsx           Créneaux à venir (cours à l'année + stages)
     enfants.tsx             Enfants : santé, droit à l'image, licence, cartes, groupe
     compte.tsx              Mon compte : profil, adhésion, mes cartes de cours
