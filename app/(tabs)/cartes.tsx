@@ -1,7 +1,6 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useFamily } from "@/lib/family-context";
 import { colors, fonts, radii, spacing } from "@/constants/theme";
-import { EspaceHeader } from "@/components/EspaceHeader";
 
 // Même contenu que la tuile « Carte cours à l'année » de mon-espace.html :
 // toutes les cartes de l'adhérent, qu'elles soient pour lui-même ou pour un
@@ -11,7 +10,8 @@ export default function CartesScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <EspaceHeader eyebrow="ESPACE ADHÉRENT" title="Carte cours à l'année" />
+      <Text style={styles.eyebrow}>ESPACE ADHÉRENT</Text>
+      <Text style={styles.title}>Carte cours à l'année</Text>
 
       {loading && <ActivityIndicator color={colors.navy} style={{ marginTop: spacing(4) }} />}
       {error && <Text style={styles.error}>Erreur : {error}</Text>}
@@ -58,6 +58,18 @@ export default function CartesScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.sand },
   content: { padding: spacing(6), gap: spacing(3) },
+  eyebrow: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.coralDark,
+  },
+  title: {
+    fontFamily: fonts.heading,
+    fontSize: 26,
+    color: colors.navy,
+    marginBottom: spacing(1),
+  },
   subtitle: {
     fontFamily: fonts.body,
     fontSize: 14,

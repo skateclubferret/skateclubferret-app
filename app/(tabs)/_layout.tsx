@@ -6,12 +6,12 @@ import { colors, fonts } from "@/constants/theme";
 // Icônes texte simples pour ce squelette — à remplacer par de vraies icônes
 // (ex. @expo/vector-icons) une fois le projet installable.
 function TabIcon({ glyph, color }: { glyph: string; color: string }) {
-  return <Text style={{ fontSize: 20, color }}>{glyph}</Text>;
+  return <Text style={{ fontSize: 16, color }}>{glyph}</Text>;
 }
 
-// Seuls Accueil et Espace adhérent restent des onglets — les 8 rubriques de
-// l'espace adhérent (mêmes noms que les tuiles de mon-espace.html sur le
-// site) vivent sous /espace/* en écrans empilés, ouverts depuis (tabs)/espace.tsx.
+// Les 8 rubriques de l'espace adhérent (mêmes noms que les tuiles de
+// mon-espace.html sur le site) sont ici des onglets à part entière, au lieu
+// d'une grille intermédiaire — labels raccourcis pour tenir sur 9 onglets.
 export default function TabsLayout() {
   const { session, loading } = useAuth();
 
@@ -23,8 +23,9 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.coralDark,
         tabBarInactiveTintColor: "rgba(11,18,32,.45)",
-        tabBarStyle: { backgroundColor: colors.white },
-        tabBarLabelStyle: { fontFamily: fonts.bodyMedium, fontSize: 11 },
+        tabBarStyle: { backgroundColor: colors.white, height: 64, paddingBottom: 8, paddingTop: 6 },
+        tabBarLabelStyle: { fontFamily: fonts.bodyMedium, fontSize: 9.5 },
+        tabBarItemStyle: { paddingHorizontal: 0 },
       }}
     >
       <Tabs.Screen
@@ -35,10 +36,59 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="espace"
+        name="carte"
         options={{
-          title: "Espace adhérent",
+          title: "Carte",
           tabBarIcon: ({ color }) => <TabIcon glyph="🪪" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="avantages"
+        options={{
+          title: "Avantages",
+          tabBarIcon: ({ color }) => <TabIcon glyph="🎁" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="cartes"
+        options={{
+          title: "Cartes cours",
+          tabBarIcon: ({ color }) => <TabIcon glyph="🎫" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="reservations"
+        options={{
+          title: "Réservations",
+          tabBarIcon: ({ color }) => <TabIcon glyph="📅" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="enfants"
+        options={{
+          title: "Enfants",
+          tabBarIcon: ({ color }) => <TabIcon glyph="👧" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="achat"
+        options={{
+          title: "Achat",
+          tabBarIcon: ({ color }) => <TabIcon glyph="🛒" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="compte"
+        options={{
+          title: "Compte",
+          tabBarIcon: ({ color }) => <TabIcon glyph="👤" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="messagerie"
+        options={{
+          title: "Messages",
+          tabBarIcon: ({ color }) => <TabIcon glyph="💬" color={color} />,
         }}
       />
     </Tabs>

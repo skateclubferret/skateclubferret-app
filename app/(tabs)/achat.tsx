@@ -1,6 +1,5 @@
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors, fonts, radii, spacing } from "@/constants/theme";
-import { EspaceHeader } from "@/components/EspaceHeader";
 
 // Le paiement (adhésion, licence FFRS, carte de cours) se fait par Stripe
 // Checkout côté site — le porter en natif (Payment Sheet Stripe) est un gros
@@ -9,7 +8,8 @@ import { EspaceHeader } from "@/components/EspaceHeader";
 export default function AchatScreen() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <EspaceHeader eyebrow="ESPACE ADHÉRENT" title="Ajouter à mon compte" />
+      <Text style={styles.eyebrow}>ESPACE ADHÉRENT</Text>
+      <Text style={styles.title}>Ajouter à mon compte</Text>
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Adhésion, licence FFRS, carte de cours</Text>
@@ -45,6 +45,18 @@ export default function AchatScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.sand },
   content: { padding: spacing(6), gap: spacing(3) },
+  eyebrow: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.coralDark,
+  },
+  title: {
+    fontFamily: fonts.heading,
+    fontSize: 26,
+    color: colors.navy,
+    marginBottom: spacing(1),
+  },
   card: {
     backgroundColor: colors.white,
     borderRadius: radii.lg,

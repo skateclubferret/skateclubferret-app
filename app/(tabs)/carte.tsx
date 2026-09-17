@@ -2,7 +2,6 @@ import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "re
 import { useFamily } from "@/lib/family-context";
 import { supabase } from "@/lib/supabase";
 import { colors, fonts, radii, spacing } from "@/constants/theme";
-import { EspaceHeader } from "@/components/EspaceHeader";
 
 // Même contenu que la tuile « Ma Carte Membre » de mon-espace.html —
 // changer la photo de la carte reste à faire sur le site pour l'instant
@@ -16,7 +15,8 @@ export default function CarteScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <EspaceHeader eyebrow="ESPACE ADHÉRENT" title="Ma Carte Membre" />
+      <Text style={styles.eyebrow}>ESPACE ADHÉRENT</Text>
+      <Text style={styles.title}>Ma Carte Membre</Text>
 
       {loading && <ActivityIndicator color={colors.navy} style={{ marginTop: spacing(4) }} />}
 
@@ -61,6 +61,18 @@ export default function CarteScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.sand },
   content: { padding: spacing(6), gap: spacing(4) },
+  eyebrow: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.coralDark,
+  },
+  title: {
+    fontFamily: fonts.heading,
+    fontSize: 26,
+    color: colors.navy,
+    marginBottom: spacing(1),
+  },
   card: {
     backgroundColor: colors.navy,
     borderRadius: radii.lg,

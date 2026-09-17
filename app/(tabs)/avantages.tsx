@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { supabase } from "@/lib/supabase";
 import { colors, fonts, radii, spacing } from "@/constants/theme";
-import { EspaceHeader } from "@/components/EspaceHeader";
 
 type Perk = { id: string; nom: string; avantage: string; logo_url: string | null };
 
@@ -32,7 +31,8 @@ export default function AvantagesScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <EspaceHeader eyebrow="ESPACE ADHÉRENT" title="Mes avantages partenaires" />
+      <Text style={styles.eyebrow}>ESPACE ADHÉRENT</Text>
+      <Text style={styles.title}>Mes avantages partenaires</Text>
 
       {loading && <ActivityIndicator color={colors.navy} style={{ marginTop: spacing(4) }} />}
 
@@ -60,6 +60,18 @@ export default function AvantagesScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.sand },
   content: { padding: spacing(6), gap: spacing(3) },
+  eyebrow: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.coralDark,
+  },
+  title: {
+    fontFamily: fonts.heading,
+    fontSize: 26,
+    color: colors.navy,
+    marginBottom: spacing(1),
+  },
   subtitle: {
     fontFamily: fonts.body,
     fontSize: 14,

@@ -3,7 +3,6 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View
 import { useFamily, type CreneauModele } from "@/lib/family-context";
 import { supabase } from "@/lib/supabase";
 import { colors, fonts, radii, spacing } from "@/constants/theme";
-import { EspaceHeader } from "@/components/EspaceHeader";
 import { dateLabel, groupeLabel, heureLabel, lieuLabel } from "@/lib/creneaux-format";
 
 type Creneau = {
@@ -215,7 +214,8 @@ export default function ReservationsScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <EspaceHeader eyebrow="ESPACE ADHÉRENT" title="Mes réservations stages vacances" />
+      <Text style={styles.eyebrow}>ESPACE ADHÉRENT</Text>
+      <Text style={styles.title}>Mes réservations stages vacances</Text>
 
       {loading && <ActivityIndicator color={colors.navy} style={{ marginTop: spacing(4) }} />}
 
@@ -385,6 +385,18 @@ export default function ReservationsScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.sand },
   content: { padding: spacing(6), gap: spacing(3) },
+  eyebrow: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.coralDark,
+  },
+  title: {
+    fontFamily: fonts.heading,
+    fontSize: 26,
+    color: colors.navy,
+    marginBottom: spacing(1),
+  },
   section: { gap: spacing(2.5) },
   sectionTitle: {
     fontFamily: fonts.headingMedium,

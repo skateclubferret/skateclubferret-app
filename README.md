@@ -8,7 +8,7 @@ Ce dépôt est volontairement séparé de `skateclubferret/skateclubferret-2026`
 
 - ✅ Connexion (`app/(auth)/login.tsx`) avec les identifiants Supabase existants
 - ✅ Client Supabase configuré (`lib/supabase.ts`, clé publique dans `app.json`)
-- ✅ **Espace adhérent** (`app/(tabs)/espace.tsx` + `app/espace/*.tsx`) : mêmes 8 rubriques, mêmes noms, que les tuiles de mon-espace.html sur le site — Ma Carte Membre, Mes avantages partenaires, Carte cours à l'année, Mes réservations stages vacances (réservation/annulation d'un stage, même logique de capacité/débit de séance que le site), Mes enfants et moi, Ajouter à mon compte (renvoie vers le site — paiement natif pas encore fait), Mes informations adhérent, Ma messagerie (pas encore construite — renvoie vers les contacts du club). Tout est chargé une fois via `lib/family-context.tsx` (même lecture RLS que mon-espace.html).
+- ✅ **Espace adhérent** — mêmes 8 rubriques, mêmes noms, que les tuiles de mon-espace.html sur le site, chacune en onglet en bas (`app/(tabs)/*.tsx`) : Ma Carte Membre, Mes avantages partenaires, Carte cours à l'année, Mes réservations stages vacances (réservation/annulation d'un stage, même logique de capacité/débit de séance que le site), Mes enfants et moi, Ajouter à mon compte (renvoie vers le site — paiement natif pas encore fait), Mes informations adhérent, Ma messagerie (pas encore construite — renvoie vers les contacts du club). Tout est chargé une fois via `lib/family-context.tsx` (même lecture RLS que mon-espace.html).
 - ✅ **Pré-inscription saison** (`preinscription.tsx`) : bannière sur l'Accueil dès qu'une `preinscription_saisons` est publiée, formulaire qui écrit dans `preinscriptions` et déclenche l'email de confirmation (`confirm-preinscription`) — mêmes champs et même Edge Function que cours-a-l-annee.html.
 - ✅ Charte graphique reprise du site (`constants/theme.ts`) + polices Space Grotesk / Inter
 - ⬜ Paiement natif Stripe, notifications push, console admin, boutique, événements/photos, messagerie temps réel, modification du profil/enfants — voir le plan pour le détail des phases restantes
@@ -56,11 +56,9 @@ app/
   (auth)/
     _layout.tsx
     login.tsx
-  (tabs)/
-    _layout.tsx          barre d'onglets : Accueil, Espace adhérent
-    index.tsx             Accueil (bannière pré-inscription + statut)
-    espace.tsx             Grille des 8 rubriques (mêmes noms que les tuiles du site)
-  espace/                 écrans empilés ouverts depuis (tabs)/espace.tsx
+  (tabs)/                 barre d'onglets en bas — 9 onglets, mêmes noms que les tuiles du site
+    _layout.tsx
+    index.tsx              Accueil (bannière pré-inscription + statut)
     carte.tsx               Ma Carte Membre
     avantages.tsx            Mes avantages partenaires
     cartes.tsx                Carte cours à l'année (toutes les cartes de la famille)
@@ -69,8 +67,6 @@ app/
     achat.tsx                   Ajouter à mon compte (renvoie vers le site pour le paiement)
     compte.tsx                   Mes informations adhérent : profil, adhésion
     messagerie.tsx                Ma messagerie (bientôt disponible — renvoie vers les contacts du club)
-components/
-  EspaceHeader.tsx        en-tête (retour + titre) commune aux écrans /espace/*
 lib/
   supabase.ts            client supabase-js (URL + clé publique)
   auth-context.tsx        contexte React de la session Supabase
